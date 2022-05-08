@@ -24,7 +24,7 @@ data class User(
     private var enabled: Boolean = true,
     var role: Role? = Role.ROLE_USER,
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "user")
     var notes: List<Note>? = ArrayList()
 
 ) : UserDetails {
