@@ -21,6 +21,11 @@ class NoteService(
         noteRepository.save(note);
         return ResponseEntity(note.toString(), HttpStatus.OK)
     }
+
+    fun updateNote(note: Note, text: String) {
+        note.text = text
+        noteRepository.save(note)
+    }
     fun readAll(): List<Note> = noteRepository.findAll()
     fun getAllUserNotes(user: User) = noteRepository.findAllByUser(user)
     fun findById(id: Int) = noteRepository.findById(id)

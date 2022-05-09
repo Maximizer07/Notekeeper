@@ -13,16 +13,15 @@ import javax.persistence.*
 @NoArgsConstructor
 @Table(name = "notes")
 data class Note(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    var title: String? = null,
-    var text: String? = null,
-    var color: String? = null,
+    var text: String? = "",
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    var user: User,
+    var user: User = User()
 
 )
