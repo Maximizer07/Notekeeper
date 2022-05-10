@@ -30,5 +30,7 @@ class NoteService(
     fun getAllUserNotes(user: User) = noteRepository.findAllByUser(user)
     fun findById(id: Int) = noteRepository.findById(id)
     fun findByUser(user: User) = noteRepository.findByUser(user)
-    fun deleteById(id: Int) = noteRepository.deleteById(id)
+    fun deleteById(id: Int) {
+        return noteRepository.deleteById(id)
+    }
 }

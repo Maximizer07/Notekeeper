@@ -17,14 +17,14 @@ import javax.persistence.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null,
+    private var id: Int? = null,
     private var name: String = "",
     private var password: String = "",
     private var email: String = "",
     private var enabled: Boolean = true,
     var role: Role? = Role.ROLE_USER,
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "user")
     var notes: List<Note>? = ArrayList()
 
 ) : UserDetails {

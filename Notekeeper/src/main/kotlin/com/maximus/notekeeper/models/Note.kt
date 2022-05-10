@@ -16,7 +16,7 @@ data class Note(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Int? = null,
     var text: String? = "",
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -24,4 +24,8 @@ data class Note(
     @JsonIgnore
     var user: User = User()
 
-)
+) {
+    override fun toString(): String {
+        return "Note(id=$id, text=$text, user=${user.username})"
+    }
+}

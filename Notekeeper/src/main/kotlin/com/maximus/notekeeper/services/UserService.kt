@@ -24,7 +24,8 @@ class UserService(
     private var bCryptPasswordEncoder: BCryptPasswordEncoder = BCryptPasswordEncoder()
 ) : UserDetailsService {
     fun addUser(regInput: RegistrationInput): ResponseEntity<String> {
-        val user = User(name = regInput.name, password = regInput.password, email = regInput.email)
+        println(regInput)
+        val user = User(name = regInput.name, password = regInput.password, email = regInput.email!!)
         val encryptedPassword = bCryptPasswordEncoder.encode(user.password)
         user.password = encryptedPassword
         user.notes = ArrayList()

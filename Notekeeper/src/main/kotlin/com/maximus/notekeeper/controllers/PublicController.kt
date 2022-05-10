@@ -45,10 +45,10 @@ class PublicController(
     }
 
     @PutMapping(value = ["/api/public/notes/{id}"])
-    fun updateNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable id: Int, @RequestBody text: String): ResponseEntity<Note?> {
+    fun updateNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable id: Int, @RequestBody note_edit: Note): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
         return if (userService.findByName(username)!! == note?.user) {
-            noteService.updateNote(note, text)
+            noteService.updateNote(note, note_edit.text!!)
             ResponseEntity(note, HttpStatus.OK);
         } else
             ResponseEntity(null, HttpStatus.NOT_FOUND)
@@ -58,7 +58,7 @@ class PublicController(
     fun deleteNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable("id") id: Int = 0): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
         return if (userService.findByName(username)!! == note?.user) {
-            noteService.deleteById(note.id!!.toInt());
+            noteService.deleteById(note.id!!);
             ResponseEntity(note, HttpStatus.OK);
         } else
             ResponseEntity(null, HttpStatus.NOT_FOUND)

@@ -5,16 +5,18 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(100)              NOT NULL,
     role     VARCHAR(100)              NOT NULL,
     email    VARCHAR(100) UNIQUE,
-    enabled  BOOL                      NOT NULL
+    enabled  BOOL                      NOT NULL,
+    theme    VARCHAR(100)              DEFAULT 'default'
 );
 
 CREATE TABLE IF NOT EXISTS notes
 (
     id       SERIAL PRIMARY KEY UNIQUE NOT NULL,
     user_id  INTEGER                   NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    title    VARCHAR(100)              NOT NULL,
-    text     text,
-    color    VARCHAR(100)              DEFAULT 'FFFFFF'
+    text     TEXT
 );
+
+ALTER TABLE notes
+    ADD CONSTRAINT fk_user_notes FOREIGN KEY (user_id)
+        REFERENCES users (id) ON DELETE CASCADE;
 
