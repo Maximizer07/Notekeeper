@@ -13,37 +13,31 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(
+class AuthService(
     @Autowired
     private var userRepository: UserRepository,
     @Autowired
     val jwtProvider: JwtProvider,
     private var bCryptPasswordEncoder: BCryptPasswordEncoder = BCryptPasswordEncoder()
 ) : UserDetailsService {
-    fun addUser(regInput: RegistrationInput): ResponseEntity<String> {
-        println(regInput)
-        val user = User(name = regInput.name, password = regInput.password, email = regInput.email!!)
+    fun signUp(userInfo: RegistrationInput): User {
+        println(userInfo)
+        val user = User(username = userInfo.username, name= userInfo.name!!, password = userInfo.password, email = userInfo.email!!)
         val encryptedPassword = bCryptPasswordEncoder.encode(user.password)
         user.password = encryptedPassword
         user.notes = ArrayList()
         user.isEnabled = true
         user.role = Role.ROLE_USER
         userRepository.save(user)
-        return ResponseEntity(user.toString(), HttpStatus.OK)
+        return userRepository.save(user)
     }
 
-    fun readAll(): List<User> = userRepository.findAll()
-    fun findById(id: Int) = userRepository.findById(id)
-    fun findByName(name: String) = userRepository.findByName(name)
-    fun findByEmail(email: String) = userRepository.findByEmail(email)
-    fun deleteById(id: Int) = userRepository.deleteById(id)
-    fun deleteByName(name: String) = userRepository.deleteByName(name)
-    fun deleteByEmail(email: String) = userRepository.deleteByEmail(email)
-    override fun loadUserByUsername(username: String?): UserDetails {
-        val optionalUser: User? = userRepository.findByName(username!!);
+    override fun loadUserByUsername(username: String): UserDetails {
+        val optionalUser: User? = userRepository.findByUsername(username);
         if (optionalUser != null) {
             return optionalUser
         }
@@ -51,11 +45,11 @@ class UserService(
     }
 
     fun login(authInput: AuthInput): ResponseEntity<String> {
-        val userEntity = userRepository.findByName(authInput.name)
+        val userEntity = userRepository.findByUsername(authInput.username)
         if (userEntity != null) {
             if (bCryptPasswordEncoder.matches(authInput.password, userEntity.password)) {
                 val userDetails: UserDetails = userEntity
-                val token: String = jwtProvider.generateToken(authInput.name, userDetails.authorities)
+                val token: String = jwtProvider.generateToken(authInput.username, userDetails.authorities)
                 return ResponseEntity(token, HttpStatus.OK)
             } else {
                 return ResponseEntity("Ошибка ввода данных", HttpStatus.UNAUTHORIZED)

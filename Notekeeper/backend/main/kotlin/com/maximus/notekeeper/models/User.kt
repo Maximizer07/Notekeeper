@@ -18,6 +18,7 @@ data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Int? = null,
+    private var username: String = "",
     private var name: String = "",
     private var password: String = "",
     private var email: String = "",
@@ -46,10 +47,7 @@ data class User(
     }
 
     override fun getUsername(): String {
-        return name
-    }
-    fun getEmail(): String {
-        return email;
+        return username
     }
     override fun isAccountNonExpired(): Boolean = true
 

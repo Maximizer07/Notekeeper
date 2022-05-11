@@ -1,6 +1,6 @@
 package com.maximus.notekeeper.models
 
 data class AuthInput(
-    val name:String,
+    val username:String,
     val password:String
 )

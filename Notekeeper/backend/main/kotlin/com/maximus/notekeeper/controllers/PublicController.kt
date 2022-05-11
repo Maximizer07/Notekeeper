@@ -23,31 +23,31 @@ class PublicController(
 ) {
 
     @GetMapping("/api/public/hello")
-    fun hello(@CurrentSecurityContext(expression = "authentication.name") username: String): List<Note> {
-        return noteService.getAllUserNotes(userService.findByName(username)!!);
+    fun hello(@CurrentSecurityContext(expression = "authentication.username") username: String): List<Note> {
+        return noteService.getAllUserNotes(userService.findByUsername(username)!!);
     }
     @GetMapping(value = ["/api/public/notes"])
-    fun getAllNotes(@CurrentSecurityContext(expression = "authentication.name") username: String): List<Note> {
-        return noteService.getAllUserNotes(userService.findByName(username)!!)
+    fun getAllNotes(@CurrentSecurityContext(expression = "authentication.username") username: String): List<Note> {
+        return noteService.getAllUserNotes(userService.findByUsername(username)!!)
     }
 
     @PostMapping(value = ["/api/public/notes"])
-    fun createNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @RequestBody noteInput: NoteInput): ResponseEntity<String> {
-        return noteService.createNote(noteInput, userService.findByName(username)!!)
+    fun createNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @RequestBody noteInput: NoteInput): ResponseEntity<String> {
+        return noteService.createNote(noteInput, userService.findByUsername(username)!!)
     }
     @GetMapping(value = ["/api/public/notes/{id}"])
-    fun getNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable id: Int): ResponseEntity<Note?> {
+    fun getNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @PathVariable id: Int): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
-        return if (userService.findByName(username)!! == note?.user)
+        return if (userService.findByUsername(username)!! == note?.user)
             ResponseEntity(note, HttpStatus.OK)
         else
             ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
     @PutMapping(value = ["/api/public/notes/{id}"])
-    fun updateNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable id: Int, @RequestBody note_edit: Note): ResponseEntity<Note?> {
+    fun updateNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @PathVariable id: Int, @RequestBody note_edit: Note): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
-        return if (userService.findByName(username)!! == note?.user) {
+        return if (userService.findByUsername(username)!! == note?.user) {
             noteService.updateNote(note, note_edit.text!!)
             ResponseEntity(note, HttpStatus.OK);
         } else
@@ -57,20 +57,10 @@ class PublicController(
     @DeleteMapping(value = ["/api/public/notes/{id}"])
     fun deleteNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable("id") id: Int = 0): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
-        return if (userService.findByName(username)!! == note?.user) {
+        return if (userService.findByUsername(username)!! == note?.user) {
             noteService.deleteById(note.id!!);
             ResponseEntity(note, HttpStatus.OK);
         } else
             ResponseEntity(null, HttpStatus.NOT_FOUND)
-    }
-
-    @PostMapping("/registration")
-    fun login(@RequestBody registrationInput: RegistrationInput): ResponseEntity<String> {
-        return userService.addUser(registrationInput)
-    }
-
-    @PostMapping("/login")
-    fun auth(@RequestBody authInput: AuthInput): ResponseEntity<String> {
-        return userService.login(authInput)
     }
 }

@@ -1,5 +1,6 @@
 package com.maximus.notekeeper.jwt
 
+import com.maximus.notekeeper.services.AuthService
 import com.maximus.notekeeper.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -20,7 +21,7 @@ class JwtFilter(
     private val jwtProvider: JwtProvider,
 
     @Autowired
-    private val customUserDetailsService: UserService
+    private val customUserDetailsService: AuthService
 ) : GenericFilterBean(
 ) {
     @Throws(IOException::class, ServletException::class)
