@@ -20,7 +20,7 @@ class AuthController(
     val authService: AuthService
 ) {
     @PostMapping("/signup")
-    fun login(@ModelAttribute registrationInput: RegistrationInput): User {
+    fun login(@ModelAttribute registrationInput: RegistrationInput): ResponseEntity<String> {
         return authService.signUp(registrationInput)
     }
 

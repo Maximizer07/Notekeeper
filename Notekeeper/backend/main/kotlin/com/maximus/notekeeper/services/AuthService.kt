@@ -24,8 +24,16 @@ class AuthService(
     val jwtProvider: JwtProvider,
     private var bCryptPasswordEncoder: BCryptPasswordEncoder = BCryptPasswordEncoder()
 ) : UserDetailsService {
-    fun signUp(userInfo: RegistrationInput): User {
+    fun signUp(userInfo: RegistrationInput): ResponseEntity<String> {
         println(userInfo)
+        println(userRepository.findByUsername(userInfo.username))
+        println(userRepository.findByEmail(userInfo.email!!))
+        if (userRepository.findByUsername(userInfo.username) != null) {
+            return ResponseEntity("Not unique username", HttpStatus.CONFLICT)
+        }
+        else if (userRepository.findByEmail(userInfo.email) != null ){
+            return ResponseEntity("Not unique email", HttpStatus.CONFLICT)
+        }
         val user = User(username = userInfo.username, name= userInfo.name!!, password = userInfo.password, email = userInfo.email!!)
         val encryptedPassword = bCryptPasswordEncoder.encode(user.password)
         user.password = encryptedPassword
@@ -33,7 +41,7 @@ class AuthService(
         user.isEnabled = true
         user.role = Role.ROLE_USER
         userRepository.save(user)
-        return userRepository.save(user)
+        return ResponseEntity(user.toString(), HttpStatus.OK)
     }
 
     override fun loadUserByUsername(username: String): UserDetails {
@@ -52,9 +60,9 @@ class AuthService(
                 val token: String = jwtProvider.generateToken(authInput.username, userDetails.authorities)
                 return ResponseEntity(token, HttpStatus.OK)
             } else {
-                return ResponseEntity("Ошибка ввода данных", HttpStatus.UNAUTHORIZED)
+                return ResponseEntity("Wrong password", HttpStatus.UNAUTHORIZED)
             }
         }
-        return ResponseEntity("Ошибка ввода данных", HttpStatus.UNAUTHORIZED)
+        return ResponseEntity("User does not exist", HttpStatus.UNAUTHORIZED)
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-class PublicController(
+class UserController(
     @Autowired
     val noteService: NoteService,
     @Autowired
@@ -41,7 +41,7 @@ class PublicController(
         return if (userService.findByUsername(username)!! == note?.user)
             ResponseEntity(note, HttpStatus.OK)
         else
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
 
     @PutMapping(value = ["/api/public/notes/{id}"])
@@ -51,7 +51,7 @@ class PublicController(
             noteService.updateNote(note, note_edit.text!!)
             ResponseEntity(note, HttpStatus.OK);
         } else
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
 
     @DeleteMapping(value = ["/api/public/notes/{id}"])
@@ -61,6 +61,6 @@ class PublicController(
             noteService.deleteById(note.id!!);
             ResponseEntity(note, HttpStatus.OK);
         } else
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
+            ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
 }
