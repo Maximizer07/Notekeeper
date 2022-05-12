@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     @Autowired
     val userService: UserService,
+    @Autowired
     val authService: AuthService
 ) {
     @PostMapping("/signup")
