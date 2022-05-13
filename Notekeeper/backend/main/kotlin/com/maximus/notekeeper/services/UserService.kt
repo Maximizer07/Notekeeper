@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service
 class UserService(
     @Autowired
     private var userRepository: UserRepository,
+    private var bCryptPasswordEncoder: BCryptPasswordEncoder = BCryptPasswordEncoder()
     ) {
     fun readAll(): List<User> = userRepository.findAll()
     fun findById(id: Int) = userRepository.findById(id)
@@ -39,7 +40,22 @@ class UserService(
         }
         val user = findByUsername(username)
         user.setName(profileResponse.name)
+        user.setEmail(profileResponse.email)
         userRepository.save(user)
         return ResponseEntity("Update success", HttpStatus.OK)
+    }
+
+    fun updatePassword(username: String, changePassResponse: ChangePassResponse): ResponseEntity<String>{
+        val user = findByUsername(username)
+        if (!bCryptPasswordEncoder.matches(changePassResponse.password, user.password)) {
+            return ResponseEntity("Wrong password", HttpStatus.CONFLICT)
+        }
+        else{
+            val encryptedPassword = bCryptPasswordEncoder.encode(changePassResponse.newPassword)
+            println(changePassResponse.toString()+encryptedPassword+user.password)
+            user.password = encryptedPassword
+            userRepository.save(user)
+            return ResponseEntity("Password update success", HttpStatus.OK)
+        }
     }
 }

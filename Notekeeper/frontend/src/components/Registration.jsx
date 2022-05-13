@@ -28,7 +28,7 @@ function Registration() {
     }
 
     const findFormErrors = () => {
-        const {username, email, name, password, passwordConfirm} = form
+        const {username, email, name, password, newPassword} = form
         const newErrors = {}
 
         if (!username || username === '') newErrors.username = 'Пожалуйста введите имя пользователя'
@@ -42,7 +42,7 @@ function Registration() {
         if (!password || password === '' || password.length < 8) newErrors.password = 'Длина пароля должна быть не менее 8 символов'
         else if (password.length > 25) newErrors.password = 'Слишком длинный пароль'
 
-        if (passwordConfirm !== password) newErrors.passwordConfirm = 'Пароли не совпадают'
+        if (newPassword !== password) newErrors.newPassword = 'Пароли не совпадают'
 
         if (!name || name === '') newErrors.name = 'Пожалуйста введите имя пользователя'
 
@@ -182,13 +182,13 @@ function Registration() {
                                         <Form.Group size="lg">
                                             <Form.Control
                                                 placeholder="Повторите пароль"
-                                                id="passwordConfirm"
-                                                isInvalid={errors.passwordConfirm}
+                                                id="newPassword"
+                                                isInvalid={errors.newPassword}
                                                 type="password"
-                                                onChange={e => setField('passwordConfirm', e.target.value)}/>
+                                                onChange={e => setField('newPassword', e.target.value)}/>
 
                                             <Form.Control.Feedback type='invalid'>
-                                                {errors.passwordConfirm}
+                                                {errors.newPassword}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </div>

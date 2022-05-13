@@ -37,9 +37,9 @@ class SecurityConfig(
             .cors()
             .and()
             .authorizeHttpRequests()
-            .antMatchers("/registration", "/signup", "/", "/home").permitAll()
-            .antMatchers("/api/admin/**", "/logout").hasRole("ADMIN")
-            .antMatchers("/api/user/**", "/logout").hasRole("USER")
+            .antMatchers("/", "/login", "/signup", "/home").permitAll()
+            .antMatchers("/api/user/**", "/logout").hasAnyRole("ADMIN","USER")
+            .antMatchers("/api/admin/**").hasRole("ADMIN")
             .and()
             .userDetailsService(authService).exceptionHandling()
             .authenticationEntryPoint { request: HttpServletRequest?, response: HttpServletResponse, authException: AuthenticationException? ->

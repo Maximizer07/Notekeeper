@@ -79,7 +79,6 @@ class UserController(
 
     @GetMapping(value = ["/profile"])
     fun getUserData(@CurrentSecurityContext(expression = "authentication.name") username: String): ProfileResponse {
-        println(userService.getProfile(username))
         return userService.getProfile(username)
     }
 
@@ -92,6 +91,18 @@ class UserController(
             ResponseEntity(null, HttpStatus.FORBIDDEN)
         else
             return userService.updateProfile(username, profileResponse)
+
+    }
+
+    @PostMapping(value = ["/changepass"])
+    fun updatePassword(
+        @CurrentSecurityContext(expression = "authentication.name") username: String,
+        @ModelAttribute changePassResponse: ChangePassResponse
+    ): ResponseEntity<String> {
+        return if (username != changePassResponse.username)
+            ResponseEntity(null, HttpStatus.FORBIDDEN)
+        else
+            return userService.updatePassword(username, changePassResponse)
 
     }
 }

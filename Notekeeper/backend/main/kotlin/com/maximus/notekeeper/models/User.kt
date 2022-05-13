@@ -56,6 +56,10 @@ data class User(
     fun setName(name : String) {
         this.name = name
     }
+
+    fun setEmail(email : String) {
+        this.email = email
+    }
     override fun getPassword(): String {
         return password
     }
