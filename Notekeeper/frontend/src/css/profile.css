@@ -1,0 +1,60 @@
+.profile {
+    padding-top: 4em;
+    color: #2e323c;
+    position: relative;
+    height: 100%;
+
+}
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+.account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+.account-settings .user-profile .user-avatar img {
+    width: 5.625em;
+    height: 5.625em;
+    -webkit-border-radius: 6.25em;
+    -moz-border-radius: 6.25em;
+    border-radius: 6.25em;
+}
+.account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+.account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #9fa8b9;
+}
+.account-settings .about {
+    margin: 2rem 0 0 0;
+    text-align: center;
+}
+.account-settings .about h5 {
+    margin: 0 0 1em 0;
+    color: #007ae1;
+}
+.account-settings .about p {
+    font-size: 0.825rem;
+}
+.form-control {
+    border: 0.063em solid #cfd1d8;
+    -webkit-border-radius: 0.125em;
+    -moz-border-radius: 0.125em;
+    border-radius: 0.125em;
+    font-size: .825rem;
+    background: #ffffff;
+    color: #2e323c;
+}
+
+.card {
+    background: #ffffff;
+    -webkit-border-radius: 0.313em;
+    -moz-border-radius: 0.313em;
+    border-radius: 0.313em;
+    border: 0;
+    margin-bottom: 1rem;
+}

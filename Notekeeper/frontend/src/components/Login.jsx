@@ -78,6 +78,7 @@ function Login() {
                 if (response != null) {
                     localStorage.setItem("user", JSON.stringify(response.data));
                     navigate("/profile")
+                    //window.location.reload();
                 }
             })
         }

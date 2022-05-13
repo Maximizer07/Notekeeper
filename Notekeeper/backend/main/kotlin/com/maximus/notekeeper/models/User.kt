@@ -30,17 +30,31 @@ data class User(
 
 ) : UserDetails {
     override fun getAuthorities(): Collection<GrantedAuthority?>? {
-        if (role!=null) {
+        if (role != null) {
             val simpleGrantedAuthority = SimpleGrantedAuthority(role?.name)
             return Collections.singletonList(simpleGrantedAuthority)
         }
         return null
     }
-    fun setPassword(password: String){
+
+    fun setPassword(password: String) {
         this.password = password
     }
-    fun setEnabled(enabled: Boolean){
+
+    fun setEnabled(enabled: Boolean) {
         this.enabled = enabled
+    }
+
+    fun getEmail(): String {
+        return email
+    }
+
+    fun getName(): String {
+        return name
+    }
+
+    fun setName(name : String) {
+        this.name = name
     }
     override fun getPassword(): String {
         return password
@@ -49,6 +63,7 @@ data class User(
     override fun getUsername(): String {
         return username
     }
+
     override fun isAccountNonExpired(): Boolean = true
 
     override fun isAccountNonLocked(): Boolean = true
@@ -58,4 +73,9 @@ data class User(
     override fun isEnabled(): Boolean {
         return enabled
     }
+
+    fun getId(): Int? {
+        return id
+    }
+
 }

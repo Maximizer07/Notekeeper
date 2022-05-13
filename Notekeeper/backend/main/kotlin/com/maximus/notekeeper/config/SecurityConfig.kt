@@ -37,7 +37,7 @@ class SecurityConfig(
             .cors()
             .and()
             .authorizeHttpRequests()
-            .antMatchers("/registration", "/signup", "/").permitAll()
+            .antMatchers("/registration", "/signup", "/", "/home").permitAll()
             .antMatchers("/api/admin/**", "/logout").hasRole("ADMIN")
             .antMatchers("/api/user/**", "/logout").hasRole("USER")
             .and()

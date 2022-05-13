@@ -5,6 +5,8 @@ import Registration from "./components/Registration"
 import Login from "./components/Login"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import Home from "./components/Home"
+import Profile from "./components/Profile"
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -17,8 +19,11 @@ function App() {
                 <div className="App">
                     <Header/>
                     <Routes>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="/home" element={<Home/>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/registration" element={<Registration/>}/>
+                        <Route path="/profile" element={<Profile/>}/>
                     </Routes>
                     <Footer/>
                 </div>
