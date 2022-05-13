@@ -22,20 +22,20 @@ class UserController(
     val userService: UserService
 ) {
 
-    @GetMapping("/api/public/hello")
+    @GetMapping("/api/user/hello")
     fun hello(@CurrentSecurityContext(expression = "authentication.username") username: String): List<Note> {
         return noteService.getAllUserNotes(userService.findByUsername(username)!!);
     }
-    @GetMapping(value = ["/api/public/notes"])
+    @GetMapping(value = ["/api/user/notes"])
     fun getAllNotes(@CurrentSecurityContext(expression = "authentication.username") username: String): List<Note> {
         return noteService.getAllUserNotes(userService.findByUsername(username)!!)
     }
 
-    @PostMapping(value = ["/api/public/notes"])
+    @PostMapping(value = ["/api/user/notes"])
     fun createNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @RequestBody noteInput: NoteInput): ResponseEntity<String> {
         return noteService.createNote(noteInput, userService.findByUsername(username)!!)
     }
-    @GetMapping(value = ["/api/public/notes/{id}"])
+    @GetMapping(value = ["/api/user/notes/{id}"])
     fun getNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @PathVariable id: Int): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
         return if (userService.findByUsername(username)!! == note?.user)
@@ -44,7 +44,7 @@ class UserController(
             ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
 
-    @PutMapping(value = ["/api/public/notes/{id}"])
+    @PutMapping(value = ["/api/user/notes/{id}"])
     fun updateNote(@CurrentSecurityContext(expression = "authentication.username") username: String, @PathVariable id: Int, @RequestBody note_edit: Note): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
         return if (userService.findByUsername(username)!! == note?.user) {
@@ -54,7 +54,7 @@ class UserController(
             ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
 
-    @DeleteMapping(value = ["/api/public/notes/{id}"])
+    @DeleteMapping(value = ["/api/user/notes/{id}"])
     fun deleteNote(@CurrentSecurityContext(expression = "authentication.name") username: String, @PathVariable("id") id: Int = 0): ResponseEntity<Note?> {
         val note: Note? = noteService.findById(id)
         return if (userService.findByUsername(username)!! == note?.user) {
