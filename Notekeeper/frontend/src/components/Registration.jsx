@@ -4,6 +4,7 @@ import {Button, Card, Col, Container, Form, Row, Modal} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom"
 import validator from "validator"
 
+import ModalWindow from "./ModalWindow";
 import "../css/login.css";
 
 function Registration() {
@@ -12,8 +13,7 @@ function Registration() {
     const [errors, setErrors] = useState({})
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
 
     const setField = (field, value) => {
         setForm({
@@ -83,6 +83,8 @@ function Registration() {
                         }
                         setErrors(newErrors)
                     }
+                    else
+                        newErrors.username = error.response.data
                 } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -94,11 +96,15 @@ function Registration() {
                 }
                 console.log(error.config);
             }).then(response => {
-                if (response!= null) handleShow();
+                if (response!= null) setShow(true)
             })
         }
     }
 
+
+    const handleClose = () => {
+        setShow(false)
+    }
 
     function successRegModal() {
         navigate("/login")
@@ -203,17 +209,7 @@ function Registration() {
                     </Col>
                 </Row>
             </Container>
-            <Modal show={show}>
-                <Modal.Header closeButton onClick={handleClose}>
-                    <Modal.Title>Успешная регистрация</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Теперь можете переходить к входу</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={successRegModal}>
-                        Закрыть
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalWindow header="Успешная регистрация" body="Теперь вы можете перейти к авторизации" show ={show} action={successRegModal} close = {handleClose}/>
         </section>
     );
 }

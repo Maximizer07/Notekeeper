@@ -23,9 +23,9 @@ class AdminController(
         println(noteService.readAll())
         return noteService.readAll()
     }
-    @GetMapping(value = ["/notes/{id}"])
-    fun getNote(@RequestBody user: User, id: Int): List<Note> {
-        println(noteService.getAllUserNotes(user))
-        return noteService.getAllUserNotes(user)
-    }
+
+    //@GetMapping(value = ["/notes/{id}"])
+    //fun getNote(@RequestBody user: User, id: Int): List<Note> {
+    //    return noteService.getAllUserNotes(user)
+    //}
 }

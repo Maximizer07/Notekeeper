@@ -30,6 +30,7 @@ class UserService(
 
     fun getProfile(username: String): ProfileResponse{
         val user = findByUsername(username)
+        println(user.toString() + "Лол")
         return ProfileResponse(username= user.username, email = user.getEmail(), name=user.getName(), id = user.getId()!!, role=user.role!!)
     }
 

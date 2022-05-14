@@ -4,23 +4,39 @@ import {Button, Container, Nav, Navbar, Spinner} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import React from "react";
+import ModalWindow from "./ModalWindow";
 
-const Header = () => {
+const Header = (props) => {
+    const changeAuth = props.changeAuth
+    let navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     let [isAdmin, setIsAdmin] = useState(false);
-    let token = useState(false);
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const getUser = async () => {
         try {
-            token = JSON.parse(localStorage.getItem("user"));
-            await axios.get("http://localhost:8080/api/user/profile", {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then((response) => {
-                setIsAdmin(response.data.role.includes('ROLE_ADMIN'))
+            let token = JSON.parse(localStorage.getItem("user"));
+            if (token != null) {
+                await axios.get("http://localhost:8080/api/user/profile", {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).catch(function (error) {
+                    console.log(error)
+                    if (error.response.data.startsWith("Unknown user")){
+                        console.log(error)
+                    }
+                }).then((response) => {
+                    setIsAdmin(response.data.role.includes('ROLE_ADMIN'))
+                    changeAuth(true)
+                    setLoading(false)
+                })
+                console.log(token)
+            } else
                 setLoading(false)
-            })
-            console.log(token)
         } catch (err) {
             console.error(err.message);
         }
@@ -30,7 +46,12 @@ const Header = () => {
         try {
             localStorage.removeItem("user")
             axios.get("http://localhost:8080/logout")
-            window.location.reload("/home")
+            if (changeAuth) {
+                // run the function that is passed from the parent
+                changeAuth(false);
+            }
+            handleShow()
+            navigate("/home");
             console.log("redirect home")
         } catch (err) {
             console.error(err.message)
@@ -40,8 +61,8 @@ const Header = () => {
         getUser();
     }, []);
     return (
-        <Navbar bg="light" expand="lg">
-            {loading ? <Spinner animation="border" style={{width: '200', height: '200'}}/> :
+        <Navbar bg="light" expand="lg" className="header">
+            {loading ? <Spinner animation="grow" variant="light" style={{width: '200', height: '200'}}/> :
                 <Container fluid>
                     <Navbar.Brand>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -60,16 +81,16 @@ const Header = () => {
                             style={{maxHeight: '10em'}}
                         >
                             <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
-                            {token != null &&
+                            {props.auth &&
                                 <Nav.Link as={NavLink} to="/notes">Notes</Nav.Link>
                                 &&
                                 <Nav.Link as={NavLink} to="/profile">Profile</Nav.Link>
                             }
-                            {isAdmin === true &&
+                            {isAdmin &&
                                 <Nav.Link as={NavLink} to="/admin">Admin</Nav.Link>
                             }
                         </Nav>
-                        {token !=null ? (
+                        {props.auth ? (
                             <Button variant="outline-danger" onClick={logoutFunc}>Logout</Button>
                         ) : (
                             <Link to="/login">
@@ -79,7 +100,10 @@ const Header = () => {
                     </Navbar.Collapse>
                 </Container>
             }
+            <ModalWindow header="Готово" body="Вы успешно вышли из аккаунта" show={show} action={handleClose}
+                         close={handleClose}/>
         </Navbar>
+
     );
 }
 export default Header;

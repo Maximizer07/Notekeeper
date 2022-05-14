@@ -64,6 +64,8 @@ function Login() {
                         }
                         setErrors(newErrors)
                     }
+                    else
+                        newErrors.username = error.response.data
                 } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -77,7 +79,7 @@ function Login() {
             }).then(response => {
                 if (response != null) {
                     localStorage.setItem("user", JSON.stringify(response.data));
-                    navigate("/profile")
+                    navigate("/profile", {auth: true})
                     //window.location.reload();
                 }
             })

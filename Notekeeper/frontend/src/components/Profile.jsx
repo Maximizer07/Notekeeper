@@ -7,18 +7,22 @@ import {useEffect, useState} from "react";
 import validator from "validator";
 import {useNavigate} from "react-router-dom";
 import React from "react";
+import ModalWindow from "./ModalWindow";
 
-function Profile() {
+function Profile(props) {
+    const changeAuth = props.changeAuth
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState({})
     const [formPass, setFormPass] = useState({})
     const [errors, setErrors] = useState({})
     const [disabled, setDisabled] = useState(true);
     const [show, setShow] = useState(false);
-
     const handleClose = () => {
-        window.location.reload();
+        setShow(false)
+        setDisabled(true)
+        //window.location.reload();
     }
+
     const handleShow = () => setShow(true);
 
     const setField = (field, value) => {
@@ -57,7 +61,6 @@ function Profile() {
             if (Object.keys(newErrors).length > 0) {
                 setErrors(newErrors)
             } else {
-                console.log("tyta")
                 const body = {
                     username: form.formUsername,
                     email: form.formEmail,
@@ -188,6 +191,10 @@ function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             }).then((response) => {
+                if(changeAuth) {
+                    // run the function that is passed from the parent
+                    changeAuth(true);
+                }
                 console.log(response.data)
                 setForm({
                     formUsername: response.data.username,
@@ -208,7 +215,7 @@ function Profile() {
     }, []);
     return (
         <Container className="profile">
-            {loading ? <Spinner animation="border" style={{width: '200', height: '200'}}/> :
+            {loading ? <Spinner animation="border" variant="primary" style={{width: '200', height: '200'}}/> :
                 <Row className="gutters">
                     <Col xl="3" lg="3" md="12" sm="12" col="12">
                         <Card h="100">
@@ -312,17 +319,8 @@ function Profile() {
                     </Col>
                 </Row>
             }
-            <Modal show={show}>
-                <Modal.Header closeButton onClick={handleClose}>
-                    <Modal.Title>Готово</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Данные успешно изменены</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Закрыть
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalWindow header="Готово" body="Данные успешно изменены" show ={show} action={handleClose} close = {handleClose}/>
+
         </Container>
     )
 }

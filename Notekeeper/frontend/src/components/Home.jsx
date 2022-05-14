@@ -1,12 +1,12 @@
 import {Button, Container} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import "../css/home.css";
+import {useState} from "react";
 
 function Home() {
-
     return (
-        <section className="py-4 py-xl-5">
-            <Container>
+        <section className="py-4 py-xl-5 home">
+            <Container fluid>
                 <div className="text-center p-4 p-lg-5">
                     <h3 className="fw-bold text-primary mb-2">Notekeeper</h3>
                     <h1 className="fw-bold mb-4">Сервис для хранения ваших заметок</h1>
