@@ -79,6 +79,7 @@ function AdminPage() {
                     'Authorization': `Bearer ${token}`
                 }
             }).then((response) => {
+                handleShow()
                 getUsers()
             })
         } catch (err) {
@@ -112,7 +113,7 @@ function AdminPage() {
         <Container>
             {loading ? <Spinner animation="border" variant="primary" style={{width: '200', height: '200'}}/> :
                 <Col xs={12}>
-                    <h2 className="text-center mt-3">Таблица пользователей</h2>
+                    <h2 className="text-center mt-3">Таблица пользователей администратора</h2>
                     <Form>
                         <Row className="align-items-center mb-4">
                             <Col xs="auto" className="mt-4">
@@ -176,11 +177,11 @@ function AdminPage() {
                                         ))}
                                     </select>
                                 </td>
-                                <td>
+                                <td className="text-center">
                                     <Button className="btn btn-secondary"
                                             onClick={() => navigate("/admin/users/" + user.id, {user})}>Профиль</Button>
                                 </td>
-                                <td>
+                                <td className="text-center">
                                     <Button className="btn btn-danger"
                                             onClick={() => deleteUser(user.id)}>Удалить</Button>
                                 </td>

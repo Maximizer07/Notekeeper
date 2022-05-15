@@ -8,9 +8,9 @@ import ModalWindow from "./ModalWindow";
 
 const Header = (props) => {
     const changeAuth = props.changeAuth
+    const changeAdmin = props.changeAdmin
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true)
-    let [isAdmin, setIsAdmin] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -29,8 +29,10 @@ const Header = (props) => {
                     if (error.response.data.startsWith("Unknown user")){
                         console.log(error)
                     }
+                    setLoading(false)
                 }).then((response) => {
-                    setIsAdmin(response.data.role.includes('ROLE_ADMIN'))
+                    if (response.data.role.includes('ROLE_ADMIN'))
+                        changeAdmin(true)
                     changeAuth(true)
                     setLoading(false)
                 })
@@ -45,11 +47,9 @@ const Header = (props) => {
     const logoutFunc = () => {
         try {
             localStorage.removeItem("user")
+            changeAuth(false);
+            changeAdmin(false);
             axios.get("http://localhost:8080/logout")
-            if (changeAuth) {
-                // run the function that is passed from the parent
-                changeAuth(false);
-            }
             handleShow()
             navigate("/home");
             console.log("redirect home")
@@ -86,7 +86,7 @@ const Header = (props) => {
                                 &&
                                 <Nav.Link as={NavLink} to="/profile">Profile</Nav.Link>
                             }
-                            {isAdmin &&
+                            {props.isAdmin &&
                                 <Nav.Link as={NavLink} to="/admin">Admin</Nav.Link>
                             }
                         </Nav>

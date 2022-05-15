@@ -11,6 +11,7 @@ import ModalWindow from "./ModalWindow";
 
 function Profile(props) {
     const changeAuth = props.changeAuth
+    const changeAdmin = props.changeAdmin
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState({})
     const [formPass, setFormPass] = useState({})
@@ -195,6 +196,8 @@ function Profile(props) {
                     // run the function that is passed from the parent
                     changeAuth(true);
                 }
+                if (response.data.role.includes('ROLE_ADMIN'))
+                    changeAdmin(true)
                 console.log(response.data)
                 setForm({
                     formUsername: response.data.username,
@@ -203,7 +206,7 @@ function Profile(props) {
                     formRole: response.data.role,
                     formId: response.data.id
                 })
-                console.log(form)
+                console.log(response.data.role)
                 setLoading(false)
             })
         } catch (err) {

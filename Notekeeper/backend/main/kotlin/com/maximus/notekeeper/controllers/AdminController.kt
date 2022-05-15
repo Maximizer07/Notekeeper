@@ -8,9 +8,11 @@ import com.maximus.notekeeper.services.NoteService
 import com.maximus.notekeeper.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 
 @RestController
+@Transactional
 @RequestMapping("api/admin")
 class AdminController(
     @Autowired

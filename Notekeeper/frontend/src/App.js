@@ -19,12 +19,16 @@ function App() {
     const changeAuth = (auth) => {
         setAuth(auth)
     }
+    const [isAdmin, setIsAdmin] = useState(false)
+    const changeAdmin = (admin) => {
+        setIsAdmin(admin)
+    }
 
     return (
         <div className="App">
             <BrowserRouter>
                 <div className="App">
-                    <Header auth={auth} changeAuth={changeAuth}/>
+                    <Header auth={auth} isAdmin={isAdmin} changeAdmin={changeAdmin} changeAuth={changeAuth}/>
                     <Routes>
                         <Route path="/logout" element={<Home changeAuth={changeAuth}/>}/>
                         <Route path="/home" element={<Home changeAuth={changeAuth}/>}/>
@@ -32,7 +36,8 @@ function App() {
                         <Route path="/admin" element={<AdminPage/>}/>
                         <Route path="/admin/users/:id" element={<UserInfo/>}/>
                         <Route path="/registration" element={<Registration changeAuth={changeAuth}/>}/>
-                        <Route path="/profile" element={<Profile changeAuth={changeAuth}/>}/>
+                        <Route path="/profile" element={<Profile changeAuth={changeAuth} changeAdmin={changeAdmin}/>}/>
+                        <Route path="/" element={<Home changeAuth={changeAuth}/>}/>
                     </Routes>
                     <Footer auth={auth} changeAuth={changeAuth}/>
                 </div>
