@@ -34,6 +34,11 @@ class UserService(
         return ProfileResponse(username= user.username, email = user.getEmail(), name=user.getName(), id = user.getId()!!, role=user.role!!)
     }
 
+    fun updateUser(id: Int, user: User): Boolean{
+        val currentUser = userRepository.findById(id)?: return false
+        currentUser.role = user.role
+        return true
+    }
     fun updateProfile(username: String, profileResponse: ProfileResponse): ResponseEntity<String>{
         if (userRepository.findByEmail(profileResponse.email) != null &&
             userRepository.findByEmail(profileResponse.email) != userRepository.findByUsername(username)){
@@ -58,5 +63,8 @@ class UserService(
             userRepository.save(user)
             return ResponseEntity("Password update success", HttpStatus.OK)
         }
+    }
+    fun setUserRole(setRoleResponse: SetRoleResponse){
+        findById(setRoleResponse.id)!!.role=setRoleResponse.role
     }
 }

@@ -4,4 +4,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-image: url(https://phonoteka.org/uploads/posts/2021-06/1623474850_9-phonoteka_org-p-tekstura-ofisnogo-stola-krasivo-10.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #9fa8b9;
+}
+
+@media only screen and (max-width: 767px) {
+    .home {
+        background-image: url(https://phonoteka.org/uploads/posts/2021-06/1623474850_9-phonoteka_org-p-tekstura-ofisnogo-stola-krasivo-10.jpg);
+    }
 }

@@ -6,10 +6,13 @@ import Footer from "./components/Footer"
 import Header from "./components/Header"
 import Home from "./components/Home"
 import Profile from "./components/Profile"
+import AdminPage from "./components/AdminPage";
+import UserInfo from "./components/UserInfo";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import Templates from "./components/Templates";
+
+
 
 function App() {
     const [auth, setAuth] = useState(false)
@@ -25,8 +28,9 @@ function App() {
                     <Routes>
                         <Route path="/logout" element={<Home changeAuth={changeAuth}/>}/>
                         <Route path="/home" element={<Home changeAuth={changeAuth}/>}/>
-                        <Route path="/note" element={<Templates/>}/>
                         <Route path="/login" element={<Login changeAuth={changeAuth}/>}/>
+                        <Route path="/admin" element={<AdminPage/>}/>
+                        <Route path="/admin/users/:id" element={<UserInfo/>}/>
                         <Route path="/registration" element={<Registration changeAuth={changeAuth}/>}/>
                         <Route path="/profile" element={<Profile changeAuth={changeAuth}/>}/>
                     </Routes>
