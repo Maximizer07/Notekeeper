@@ -1,9 +1,6 @@
 package com.maximus.notekeeper.controllers
 
-import com.maximus.notekeeper.models.Note
-import com.maximus.notekeeper.models.Role
-import com.maximus.notekeeper.models.SetRoleResponse
-import com.maximus.notekeeper.models.User
+import com.maximus.notekeeper.models.*
 import com.maximus.notekeeper.services.NoteService
 import com.maximus.notekeeper.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,11 +17,6 @@ class AdminController(
     @Autowired
     val userService: UserService
 ) {
-    @GetMapping(value = ["/notes"])
-    fun getNotes(): List<Note> {
-        println(noteService.readAll())
-        return noteService.readAll()
-    }
     @GetMapping(value = ["/users"])
     fun getUsers(): List<User> {
         return userService.readAll()
@@ -45,8 +37,8 @@ class AdminController(
     }
 
     @PutMapping("/users/{id}")
-    fun updateUser(@PathVariable id: Int, @RequestBody user: User) : Boolean{
-        return userService.updateUser(id, user)
+    fun updateUser(@PathVariable id: Int, @ModelAttribute profileResponse: ProfileResponse) : Boolean{
+        return userService.updateUser(id, profileResponse)
     }
 
     @DeleteMapping("/users/{id}")

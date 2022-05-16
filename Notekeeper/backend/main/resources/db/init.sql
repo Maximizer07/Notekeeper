@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS notes
     id       SERIAL PRIMARY KEY UNIQUE NOT NULL,
     title                 VARCHAR(100) NOT NULL,
     text     TEXT                      NOT NULL,
+    last_modified     TEXT              NOT NULL,
     user_id  INTEGER                   NOT NULL
 );
 

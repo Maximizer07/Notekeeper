@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.CurrentSecurityContext
 import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 @RequestMapping("/api/notes")
+@Transactional
 @RestController
 class NoteController(
     @Autowired
@@ -17,17 +19,24 @@ class NoteController(
     @Autowired
     val userService: UserService
 ) {
-    @GetMapping(value = ["/"])
-    fun getAllNotes(@CurrentSecurityContext(expression = "authentication.name") username: String): ResponseEntity<ListNotesResponse> {
+    @GetMapping(value = [""])
+    fun getAllNotes(@CurrentSecurityContext(expression = "authentication.name") username: String): List<Note> {
+        println("lol")
         return noteService.getAllUserNotes(userService.findByUsername(username))
     }
 
-    @PostMapping(value = ["/"])
+    @GetMapping(value = ["/new"])
     fun createNote(
-        @CurrentSecurityContext(expression = "authentication.name") username: String,
-        @ModelAttribute addNoteResponse: AddNoteResponse
-    ): ResponseEntity<SuccessResponse> {
-        return noteService.createNote(addNoteResponse, userService.findByUsername(username))
+        @CurrentSecurityContext(expression = "authentication.name") username: String
+    ): Note {
+        return noteService.createNote(userService.findByUsername(username))
+    }
+
+    @PostMapping(value = [""])
+    fun saveNotes(
+        @CurrentSecurityContext(expression = "authentication.name") username: String, @RequestBody allNotes: List<NotesPostModel>
+    ) {
+        noteService.saveNotes(allNotes)
     }
 
     @GetMapping(value = ["/{id}"])
@@ -49,12 +58,13 @@ class NoteController(
         @ModelAttribute addNoteResponse: AddNoteResponse
     ): ResponseEntity<SuccessResponse> {
         val note: Note? = noteService.findById(id)
-        return if (userService.findByUsername(username) == note?.user || note==null) {
+        return if (userService.findByUsername(username) == note?.user || note == null) {
             noteService.updateNote(note!!, addNoteResponse)
             ResponseEntity(SuccessResponse(success = true), HttpStatus.OK);
         } else
             ResponseEntity(null, HttpStatus.FORBIDDEN)
     }
+
 
     @DeleteMapping(value = ["{id}"])
     fun deleteNote(

@@ -40,6 +40,9 @@ data class User(
     fun setPassword(password: String) {
         this.password = password
     }
+    fun setUsername(username: String) {
+        this.username = username
+    }
 
     fun setEnabled(enabled: Boolean) {
         this.enabled = enabled

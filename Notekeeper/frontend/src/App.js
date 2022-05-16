@@ -7,10 +7,10 @@ import Header from "./components/Header"
 import Home from "./components/Home"
 import Profile from "./components/Profile"
 import AdminPage from "./components/AdminPage";
-import UserInfo from "./components/UserInfo";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Notes from "./components/Notes";
 
 
 
@@ -34,9 +34,9 @@ function App() {
                         <Route path="/home" element={<Home changeAuth={changeAuth}/>}/>
                         <Route path="/login" element={<Login changeAuth={changeAuth}/>}/>
                         <Route path="/admin" element={<AdminPage/>}/>
-                        <Route path="/admin/users/:id" element={<UserInfo/>}/>
                         <Route path="/registration" element={<Registration changeAuth={changeAuth}/>}/>
                         <Route path="/profile" element={<Profile changeAuth={changeAuth} changeAdmin={changeAdmin}/>}/>
+                        <Route path="/notes" element={<Notes/>}/>
                         <Route path="/" element={<Home changeAuth={changeAuth}/>}/>
                     </Routes>
                     <Footer auth={auth} changeAuth={changeAuth}/>

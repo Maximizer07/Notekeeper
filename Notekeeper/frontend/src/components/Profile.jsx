@@ -207,6 +207,7 @@ function Profile(props) {
                     formId: response.data.id
                 })
                 console.log(response.data.role)
+
                 setLoading(false)
             })
         } catch (err) {

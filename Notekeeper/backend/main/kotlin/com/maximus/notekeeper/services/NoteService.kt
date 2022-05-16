@@ -1,12 +1,16 @@
 package com.maximus.notekeeper.services
 
-import com.maximus.notekeeper.models.*
+import com.maximus.notekeeper.models.AddNoteResponse
+import com.maximus.notekeeper.models.Note
+import com.maximus.notekeeper.models.NotesPostModel
+import com.maximus.notekeeper.models.User
 import com.maximus.notekeeper.repositories.NoteRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.transaction.Transactional
+
 
 @Service
 @Transactional
@@ -14,24 +18,31 @@ class NoteService(
     @Autowired
     private val noteRepository: NoteRepository
 ) {
-    fun createNote(addNoteResponse: AddNoteResponse, user: User) : ResponseEntity<SuccessResponse> {
-        val note = Note(title = addNoteResponse.title, text = addNoteResponse.text, user = user)
-        noteRepository.save(note)
-
-        return ResponseEntity(SuccessResponse(success = true), HttpStatus.OK)
+    fun createNote(user: User) : Note{
+        return noteRepository.save(Note(title = "Untitled Note", user = user, text = "", last_modified = "update"))
     }
 
     fun updateNote(note: Note, addNoteResponse: AddNoteResponse) {
+        println(note)
+        println(addNoteResponse)
         note.text = addNoteResponse.text
         note.title = addNoteResponse.title
         noteRepository.save(note)
         println(addNoteResponse)
     }
     fun readAll(): List<Note> = noteRepository.findAll()
-    fun getAllUserNotes(user: User) : ResponseEntity<ListNotesResponse> {
-        val listNotesResponse = ListNotesResponse(listNotes = noteRepository.findAllByUser(user), success = true)
-        println(listNotesResponse)
-        return ResponseEntity(listNotesResponse, HttpStatus.OK)
+    fun getAllUserNotes(user: User) : List<Note> {
+        return noteRepository.findAllByUser(user)
+    }
+
+    fun saveNotes(list_notes : List<NotesPostModel>){
+        list_notes.forEach{
+            val note = findById(it.id)!!
+            note.title = it.title
+            note.text = it.text
+            note.last_modified = it.last_modified
+            noteRepository.save(note)
+        }
     }
     fun findById(id: Int) = noteRepository.findById(id)
     fun findByUser(user: User) = noteRepository.findByUser(user)

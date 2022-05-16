@@ -34,9 +34,14 @@ class UserService(
         return ProfileResponse(username= user.username, email = user.getEmail(), name=user.getName(), id = user.getId()!!, role=user.role!!)
     }
 
-    fun updateUser(id: Int, user: User): Boolean{
+    fun updateUser(id: Int, profileResponse: ProfileResponse): Boolean{
         val currentUser = userRepository.findById(id)?: return false
-        currentUser.role = user.role
+        println(profileResponse)
+        currentUser.role = profileResponse.role
+        currentUser.username = profileResponse.username
+        currentUser.setName(profileResponse.name)
+        currentUser.setEmail(profileResponse.email)
+        userRepository.save(currentUser)
         return true
     }
     fun updateProfile(username: String, profileResponse: ProfileResponse): ResponseEntity<String>{
